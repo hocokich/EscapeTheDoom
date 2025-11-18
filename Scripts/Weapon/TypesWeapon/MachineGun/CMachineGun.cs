@@ -19,6 +19,8 @@ public class CMachineGun : AbstractWeapon
 
 		tracerSystem.CreateTracer(firePoint.position, firePoint.forward);
 		machinegumLogic.shot(firePoint, damage);    //обработка выстрела
+													//Здесь должен появится эффект
+		Sound.PlaySound(Sound.sounds[0]);			// Звук выстрела
 	}
 	public override WeaponTypes getWeaponType()
 	{

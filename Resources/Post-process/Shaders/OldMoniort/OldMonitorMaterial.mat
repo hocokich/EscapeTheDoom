@@ -128,7 +128,7 @@ Material:
     - _GlossyReflections: 0
     - _HorizontalLines: 28.96
     - _IntencityGlitchEffect: 0
-    - _LinesIntencity: 0.02
+    - _LinesIntencity: 0.01
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005

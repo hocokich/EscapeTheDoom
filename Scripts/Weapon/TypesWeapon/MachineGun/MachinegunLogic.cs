@@ -4,7 +4,7 @@ public class MachinegunLogic : MonoBehaviour
 {
 	[SerializeField] LayerMask enemy;    //слой, на котором расположены противники
 	[Range(1, 20)]
-	public int piercingPower = 3;    //пробивная сила пуль (сколько противников может пробить пуля)
+	public float piercingPower;    //пробивная сила пуль (сколько противников может пробить пуля)
 
 	public void shot(Transform firePoint, float damage)
 	{

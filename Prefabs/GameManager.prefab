@@ -47,6 +47,8 @@ MonoBehaviour:
   level: 1
   mazeSize: 5
   mazeStep: 2
+  ultraRenderer: {fileID: 11400000, guid: 1d09024be5cc54545a2f55a6185d35b8, type: 2}
   isPaused: 0
-  player: {fileID: 1703181435086090906, guid: 7420b827260bcb64db7759c60d848785, type: 3}
-  NextPlayer: {fileID: 0}
+  player: {fileID: 0}
+  PreviusPlayer: {fileID: 0}
+  MainCamera: {fileID: 0}

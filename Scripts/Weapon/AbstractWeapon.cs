@@ -10,6 +10,8 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon  //абстрактный кла
 	public bool canFire = true;        //готово ли оружие к выстрелу
 	public ParticleSystem weaponEffect; //ссылка на эффект выстрела
 
+	public Sounds Sound;
+
 	private void Awake()
 	{
 		if (weaponEffect == null) return; //если оружие не имеет эффекта выстрела -> выход

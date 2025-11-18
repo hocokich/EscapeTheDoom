@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using Unity.VisualScripting;
+//using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -12,7 +13,12 @@ public class Player : MonoBehaviour
     public float jumpHeight = 1.5f;
     public float gravity = -20f;
 
-    [Header("Combat")]
+    [Header("Sounds")]
+    public Sounds Sound;
+	public float stepInterval = 2.5f;
+	private float stepTimer;
+
+	[Header("Combat")]
     public Health health;
 	public Ammunition ammunition;
 	public GameObject fireballPrefab;
@@ -83,10 +89,31 @@ public class Player : MonoBehaviour
 
         // --- move ---
         float h = Input.GetAxisRaw("Horizontal"); // A/D
-        float v = Input.GetAxisRaw("Vertical");   // W/S
+		float v = Input.GetAxisRaw("Vertical");   // W/S
 
-        // --- ����������� �������� ������������ ������ ---
-        Vector3 camF = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
+		bool isMoving = Mathf.Abs(h) > 0.1f || Mathf.Abs(v) > 0.1f;
+
+        if (isMoving)
+        {
+			stepTimer -= Time.deltaTime;
+
+			if (stepTimer <= 0)
+			{
+				//Debug.Log("Двигается = " + isMoving);
+				Sound.PlaySound(Sound.sounds[0]);
+				stepTimer = stepInterval; // Сбрасываем таймер
+			}
+
+        }
+		else
+		{
+			Sound.StopSound();
+			//Debug.Log("Звука нет!");
+			stepTimer = 0; // Сбрасываем таймер при остановке
+		}
+
+		// --- ����������� �������� ������������ ������ ---
+		Vector3 camF = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 camR = cameraTransform.right;
         Vector3 moveDir = (camF * v + camR * h);
 
@@ -134,7 +161,7 @@ public class Player : MonoBehaviour
             machinegun.SetActive(true);
         }
 
-        // --- Если персонаж на земле и нажал кнопку выстерал произойдет попытка выстрела ---
+        // --- Если персонаж на земле и нажал кнопку выстрела, то произойдет попытка выстрела ---
         if (Input.GetMouseButtonDown(0) && grounded)
             TryShoot(WeaponIndex);
     }

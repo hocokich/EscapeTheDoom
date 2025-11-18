@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI; // для Button
 using System.Collections;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 //using static UnityEditor.Experimental.GraphView.GraphView;      
 
 public class GameManager : MonoBehaviour
@@ -20,16 +21,18 @@ public class GameManager : MonoBehaviour
     private GameObject losePanel;
     private GameObject optionsPanel;
 
-	// панель Старого монитора
+	// Эффекты
 	private GameObject OldMonitorPanel;
     private GameObject GlobalVolume;
     private GameObject CameraPixelize;
+	private ScriptableRendererFeature aoFeature;
 
 	public bool isPaused = false;
 
     public GameObject player;
     public Player PreviusPlayer;
     public GameObject MainCamera;
+    public Sounds Sound => GetComponent<Sounds>();
 
 	[System.Obsolete]
 	void Awake()
@@ -65,19 +68,24 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "GameScene" && Input.GetKeyDown(KeyCode.Escape))
         {
             if (!isPaused) Pause();
-            else Resume();
+			else if (optionsPanel.active) optionsPanel.SetActive(false);
+			else Resume();
         }
     }
 
     // --- Когда сцена загружена ---
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Time.timeScale = 1f;
+		Sound.StopSound();
+
+		Time.timeScale = 1f;
         isPaused = false;
         Cursor.lockState = (scene.name == "GameScene") ? CursorLockMode.Locked : CursorLockMode.None;
 
         // запускаем поиск панелей и кнопок через один кадр
         StartCoroutine(FindUINextFrame());
+
+		Sound.PlaySound(Sound.sounds[0]);
 	}
 
     private IEnumerator FindUINextFrame()
@@ -123,7 +131,9 @@ public class GameManager : MonoBehaviour
 		BindButton("Option_BackButton", BackToPause);
 		BindButton("Option_OldMonitorButton", OldMonitorMode);
 		BindButton("Option_PostProcessButton", PostProcess);
-
+		BindButton("Option_AO", AmbientOcclusion);
+        FindAmbientOcclusionFeature(); // ищем эмбиент оклюжен
+		OldMonitorMode();//Сразу выключаем монитор
 		Debug.Log("UI и кнопки обновлены");
     }
 
@@ -296,4 +306,63 @@ public class GameManager : MonoBehaviour
 			GlobalVolume.SetActive(true);
 		}
 	}
+	public void AmbientOcclusion()
+	{
+		if (aoFeature != null)
+		{
+			aoFeature.SetActive(!aoFeature.isActive);
+			Debug.Log("Ambient Occlusion: " + (aoFeature.isActive ? "Включен" : "Выключен"));
+		}
+	}
+	
+	void FindAmbientOcclusionFeature()
+	{
+		// Получаем URP pipeline asset
+		UniversalRenderPipelineAsset pipelineAsset = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+
+		if (pipelineAsset == null)
+		{
+			Debug.LogError("URP Pipeline Asset не найден!");
+			return;
+		}
+
+		// Получаем renderer data через рефлексию (так как поле скрыто)
+		var field = typeof(UniversalRenderPipelineAsset).GetField("m_RendererDataList",
+			System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+		if (field == null)
+		{
+			Debug.LogError("Не удалось найти поле m_RendererDataList");
+			return;
+		}
+
+		ScriptableRendererData[] rendererDataList = field.GetValue(pipelineAsset) as ScriptableRendererData[];
+
+		if (rendererDataList == null || rendererDataList.Length == 0)
+		{
+			Debug.LogError("Renderer Data List пуст!");
+			return;
+		}
+
+		// Ищем Ambient Occlusion в первом renderer data (обычно UniversalRenderer)
+		foreach (var rendererData in rendererDataList)
+		{
+			if (rendererData == null) continue;
+
+			foreach (var feature in rendererData.rendererFeatures)
+			{
+				if (feature != null && (feature.name.ToLower().Contains("ambient") ||
+					feature.name.ToLower().Contains("occlusion") ||
+					feature.GetType().Name.ToLower().Contains("ambient")))
+				{
+					aoFeature = feature;
+					Debug.Log("Найден Ambient Occlusion: " + feature.name);
+					return;
+				}
+			}
+		}
+
+		Debug.LogWarning("Ambient Occlusion feature не найден!");
+	}
+
 }
