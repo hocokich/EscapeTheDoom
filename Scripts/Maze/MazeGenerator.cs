@@ -9,8 +9,8 @@ public class MazeGenerator : MonoBehaviour
     public float roomSize = 4f; // ? добавил недостающий параметр
 
     [Header("Prefabs")]
-    public GameObject roomPrefab;
-    public GameObject enemyPrefab;
+	public GameObject[] roomPrefabs;
+    public GameObject[] enemyPrefabs;
     public GameObject exitPrefab;
     public int enemyCount = 5; // сколько врагов появится
 
@@ -33,14 +33,17 @@ public class MazeGenerator : MonoBehaviour
             enemyCount = Mathf.Max(1, GameManager.instance.level * 3);
         }
 
-        GenerateMaze();
-        SpawnEnemies();
+        if(GameManager.instance.level > 2)
+            GenerateMaze(1);
+        else GenerateMaze(0);
+
+		SpawnEnemies(0);
 
         if (surface != null)
             surface.BuildNavMesh();
     }
 
-    void GenerateMaze()
+    void GenerateMaze(int index)
     {
         grid = new Room[width, height];
         visited = new bool[width, height];
@@ -51,7 +54,7 @@ public class MazeGenerator : MonoBehaviour
             for (int y = 0; y < height; y++)
             {
                 Vector3 pos = new Vector3(x * roomSize, 0, y * roomSize);
-                GameObject obj = Instantiate(roomPrefab, pos, Quaternion.identity, transform);
+                GameObject obj = Instantiate(roomPrefabs[index], pos, Quaternion.identity, transform);
                 Room room = obj.GetComponent<Room>();
 
                 // --- Убираем "двойные стены" ---
@@ -131,9 +134,9 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    void SpawnEnemies()
+    void SpawnEnemies(int index)
     {
-        if (enemyPrefab == null) return;
+        if (enemyPrefabs == null) return;
 
         for (int i = 0; i < enemyCount; i++)
         {
@@ -143,8 +146,9 @@ public class MazeGenerator : MonoBehaviour
             if ((x == 0 && y == 0) || (x == width - 1 && y == height - 1))
                 continue;
 
+            
             Vector3 pos = new Vector3(x * roomSize, 0.5f, y * roomSize);
-            Instantiate(enemyPrefab, pos, Quaternion.identity, transform);
+            Instantiate(enemyPrefabs[index], pos, Quaternion.identity, transform);
         }
     }
 }

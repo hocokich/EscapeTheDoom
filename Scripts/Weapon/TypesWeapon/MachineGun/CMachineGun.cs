@@ -17,10 +17,14 @@ public class CMachineGun : AbstractWeapon
 	{
 		base.fire(ammunition);    //вызов метода, описанного в классе "абстрактное оружие"
 
+		StartCoroutine(stopEffect());
+
 		tracerSystem.CreateTracer(firePoint.position, firePoint.forward);
 		machinegumLogic.shot(firePoint, damage);    //обработка выстрела
 													//Здесь должен появится эффект
-		Sound.PlaySound(Sound.sounds[0]);			// Звук выстрела
+		Sound.PlaySound(Sound.sounds[0]);           // Звук выстрела
+
+
 	}
 	public override WeaponTypes getWeaponType()
 	{

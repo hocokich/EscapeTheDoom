@@ -30,7 +30,14 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon  //абстрактный кла
 
 	public abstract WeaponTypes getWeaponType();
 
-	IEnumerator coolDown()    //метод обновлени€ состо€ни€ готовности оружи€
+	public IEnumerator stopEffect()    //метод вкл/отключени€ эффекта
+	{
+		weaponEffect.Play();
+		yield return new WaitForSeconds(0.1f / fireRate);
+		weaponEffect.Stop();
+	}
+
+	public IEnumerator coolDown()    //метод обновлени€ состо€ни€ готовности оружи€
 	{
 		yield return new WaitForSeconds(1 / fireRate);
 		canFire = true;
