@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(Time.timeScale);
         if (SceneManager.GetActiveScene().name == "GameScene" && Input.GetKeyDown(KeyCode.Escape))
         {
             if (!isPaused) Pause();
@@ -138,7 +139,6 @@ public class GameManager : MonoBehaviour
     }
 
 	// --- Поиск объекта по имени среди любых RectTransform ---
-	[System.Obsolete]
 	private GameObject FindPlayer(string name)
     {
 		Player[] players = FindObjectsOfType<Player>();
@@ -279,7 +279,6 @@ public class GameManager : MonoBehaviour
 		if (optionsPanel) optionsPanel.SetActive(false);
 	}
 
-	[System.Obsolete]
 	public void OldMonitorMode()
 	{
         if (OldMonitorPanel.active)

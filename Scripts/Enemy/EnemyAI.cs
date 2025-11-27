@@ -100,7 +100,6 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-		Debug.Log(agent.speed);
 		//Если снизилась скорость
 		if (agent.speed < 3.5f)
         {
