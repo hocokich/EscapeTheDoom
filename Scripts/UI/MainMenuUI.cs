@@ -64,7 +64,7 @@ public class MainMenuUI : MonoBehaviour
         if (GameManager.instance != null)
         {
 			GameManager.instance.player = null;
-			GameManager.instance.PreviusPlayer = null;
+			GameManager.instance._PreviusPlayer = null;
 			GameManager.instance.level = 1;
             GameManager.instance.mazeSize = 5;   // старт
             GameManager.instance.mazeStep = 2;   // шаг роста
@@ -143,7 +143,7 @@ public class MainMenuUI : MonoBehaviour
 	}
 	public void PostProcess()
 	{
-		if (GlobalVolume.active)
+		if (GlobalVolume.activeSelf)
 		{
 			GlobalVolume.SetActive(false);
 

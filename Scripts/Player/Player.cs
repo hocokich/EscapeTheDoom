@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
 		//ammunition = GetComponent<Ammunition>();
 
 		if (GameManager.instance != null)
-		    PreviusPlayer = GameManager.instance.PreviusPlayer;
+		    PreviusPlayer = GameManager.instance._PreviusPlayer;
 	}
 
 	void Start()

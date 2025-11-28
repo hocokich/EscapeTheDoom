@@ -4,6 +4,7 @@ using UnityEngine.UI; // для Button
 using System.Collections;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using System;
 //using static UnityEditor.Experimental.GraphView.GraphView;      
 
 public class GameManager : MonoBehaviour
@@ -22,16 +23,18 @@ public class GameManager : MonoBehaviour
     private GameObject optionsPanel;
 
 	// Эффекты
-	private GameObject OldMonitorPanel;
-    private GameObject GlobalVolume;
-    private GameObject CameraPixelize;
+	public GameObject GlobalVolume;
 	private ScriptableRendererFeature aoFeature;
+	//private GameObject OldMonitorPanel;
+	//private GameObject CameraPixelize;
 
 	public bool isPaused = false;
 
     public GameObject player;
-    public Player PreviusPlayer;
-    public GameObject MainCamera;
+    [NonSerialized]
+	public Player _PreviusPlayer;
+	[SerializeField]
+	public GameObject MainCamera;
     public Sounds Sound => GetComponent<Sounds>();
 
 	[System.Obsolete]
@@ -42,16 +45,16 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
 
-            instance.level = 1;
+			instance.level = 1;
 			instance.mazeSize = 5;
             instance.mazeStep = 2;
 		}
-        else
-        {
-            //Destroy(gameObject);
-            return;
-        }
-    }
+		else
+		{
+			// Если уже существует - уничтожаем дубликат
+			Destroy(gameObject);
+		}
+	}
 
     void OnEnable()
     {
@@ -65,11 +68,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(Time.timeScale);
         if (SceneManager.GetActiveScene().name == "GameScene" && Input.GetKeyDown(KeyCode.Escape))
         {
             if (!isPaused) Pause();
-			else if (optionsPanel.active) optionsPanel.SetActive(false);
+			else if (optionsPanel.activeSelf) optionsPanel.SetActive(false);
 			else Resume();
         }
     }
@@ -103,10 +105,6 @@ public class GameManager : MonoBehaviour
         winPanel = FindObjectByName("WinPanel");
         losePanel = FindObjectByName("LosePanel");
         optionsPanel = FindObjectByName("OptionsPanel");
-        //постобработка
-		OldMonitorPanel = FindObjectByName("OldMonitorScreenPanel");
-        GlobalVolume = FindObjectByName("Global Volume");
-        CameraPixelize = FindObjectByName("Camera MonitorPixelize");
 
 		HideAllPanels();
 
@@ -128,13 +126,19 @@ public class GameManager : MonoBehaviour
         BindButton("Lose_MenuButton", GoToMenu);
         BindButton("Lose_QuitButton", QuitGame);
 
+		//постобработка
+		GlobalVolume = FindObjectByName("Global Volume");
+		//OldMonitorPanel = FindObjectByName("OldMonitorScreenPanel");
+		//CameraPixelize = FindObjectByName("Camera MonitorPixelize");
+
 		// кнопки настроек
 		BindButton("Option_BackButton", BackToPause);
-		BindButton("Option_OldMonitorButton", OldMonitorMode);
 		BindButton("Option_PostProcessButton", PostProcess);
 		BindButton("Option_AO", AmbientOcclusion);
         FindAmbientOcclusionFeature(); // ищем эмбиент оклюжен
-		OldMonitorMode();//Сразу выключаем монитор
+        FindPostProcess();
+		//BindButton("Option_OldMonitorButton", OldMonitorMode);
+		//OldMonitorMode();//Сразу выключаем монитор
 		Debug.Log("UI и кнопки обновлены");
     }
 
@@ -245,10 +249,14 @@ public class GameManager : MonoBehaviour
 
     public void NextLevel()
     {
-		instance.PreviusPlayer = player.GetComponent<Player>();
+		instance._PreviusPlayer = player.GetComponent<Player>();
 		instance.level++;
 		instance.mazeSize += mazeStep;
-        Time.timeScale = 1f;
+
+		instance.GlobalVolume = GlobalVolume;
+		instance.aoFeature = aoFeature;
+
+		Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
@@ -260,7 +268,7 @@ public class GameManager : MonoBehaviour
 
     public void OptionsGame()
     {
-		if (optionsPanel) optionsPanel.SetActive(true);
+		optionsPanel.SetActive(!optionsPanel.activeSelf);
 	}
 
 	public void QuitGame()
@@ -276,44 +284,37 @@ public class GameManager : MonoBehaviour
 
 	public void BackToPause()
 	{
-		if (optionsPanel) optionsPanel.SetActive(false);
+		optionsPanel.SetActive(!optionsPanel.activeSelf);
 	}
 
-	public void OldMonitorMode()
-	{
-        if (OldMonitorPanel.active)
-        {
-			CameraPixelize.SetActive(false);
-			OldMonitorPanel.SetActive(false);
+	//public void OldMonitorMode()
+	//{
+ //       if (OldMonitorPanel.activeSelf)
+ //       {
+	//		CameraPixelize.SetActive(false);
+	//		OldMonitorPanel.SetActive(false);
 
-		}
-        else
-        {
-			CameraPixelize.SetActive(true);
-			OldMonitorPanel.SetActive(true);
-		}
-	}
+	//	}
+ //       else
+ //       {
+	//		CameraPixelize.SetActive(true);
+	//		OldMonitorPanel.SetActive(true);
+	//	}
+	//}
 	public void PostProcess()
 	{
-		if (GlobalVolume.active)
-		{
-			GlobalVolume.SetActive(false);
+		GlobalVolume.gameObject.SetActive(!GlobalVolume.gameObject.activeSelf);
+	}
 
-		}
-		else
-		{
-			GlobalVolume.SetActive(true);
-		}
+	[System.Obsolete]
+	public void FindPostProcess()
+	{
+		//GlobalVolume = FindObjectOfType<Volume>();
 	}
 	public void AmbientOcclusion()
 	{
-		if (aoFeature != null)
-		{
-			aoFeature.SetActive(!aoFeature.isActive);
-			Debug.Log("Ambient Occlusion: " + (aoFeature.isActive ? "Включен" : "Выключен"));
-		}
+		aoFeature.SetActive(!aoFeature.isActive);
 	}
-	
 	void FindAmbientOcclusionFeature()
 	{
 		// Получаем URP pipeline asset
@@ -363,5 +364,6 @@ public class GameManager : MonoBehaviour
 
 		Debug.LogWarning("Ambient Occlusion feature не найден!");
 	}
+
 
 }
