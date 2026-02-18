@@ -7,11 +7,13 @@ public class MazeGenerator : MonoBehaviour
     public int width = 10;
     public int height = 10;
     public float roomSize = 4f; // ? добавил недостающий параметр
+    public int Keys = 0;        // ключи для прохождения уровня
 
     [Header("Prefabs")]
 	public GameObject[] roomPrefabs;
     public GameObject[] enemyPrefabs;
     public GameObject exitPrefab;
+    public GameObject KeyPrefab;
     public int enemyCount = 5; // сколько врагов появится
 
     [Header("NavMesh")]
@@ -19,7 +21,6 @@ public class MazeGenerator : MonoBehaviour
 
     private Room[,] grid;
     private bool[,] visited;
-
 
     void Start()
     {
@@ -29,19 +30,22 @@ public class MazeGenerator : MonoBehaviour
             width = GameManager.instance.mazeSize;
             height = GameManager.instance.mazeSize;
 
-            // Сложность врагов растёт с уровнем
+            // Сложность врагов и кол-во ключей растёт с уровнем
             enemyCount = Mathf.Max(1, GameManager.instance.level * 3);
-        }
+            Keys = GameManager.instance.level * 1;
+		}
 
         if(GameManager.instance.level > 2)
             GenerateMaze(1);
         else GenerateMaze(0);
 
-		SpawnEnemies(0);
+		if (surface != null)
+			surface.BuildNavMesh();
 
-        if (surface != null)
-            surface.BuildNavMesh();
-    }
+		SpawnEnemies(2);
+
+        SpawnKeys();
+	}
 
     void GenerateMaze(int index)
     {
@@ -88,7 +92,7 @@ public class MazeGenerator : MonoBehaviour
         }
 
         // Выход в противоположном углу
-        Vector3 exitPos = new Vector3((width - 1) * roomSize, 0, (height - 1) * roomSize);
+        Vector3 exitPos = new Vector3((width - 1) * roomSize, 0, (height - 1) * roomSize + 2);
         Instantiate(exitPrefab, exitPos, Quaternion.identity);
     }
 
@@ -145,10 +149,45 @@ public class MazeGenerator : MonoBehaviour
             // избегаем старта (0,0) и выхода (width-1,height-1)
             if ((x == 0 && y == 0) || (x == width - 1 && y == height - 1))
                 continue;
-
             
-            Vector3 pos = new Vector3(x * roomSize, 0.5f, y * roomSize);
+            Vector3 pos = new Vector3(x * roomSize, 0f, y * roomSize);
             Instantiate(enemyPrefabs[index], pos, Quaternion.identity, transform);
         }
     }
+
+	void SpawnKeys()
+	{
+		if (KeyPrefab == null || Keys <= 0) return;
+
+		List<Vector2Int> usedPositions = new List<Vector2Int>();
+
+		for (int i = 0; i < Keys; i++)
+		{
+			int x, y;
+			int attempts = 0;
+			bool validPosition = false;
+			Vector2Int newPos;
+
+			do
+			{
+				x = Random.Range(0, width);
+				y = Random.Range(0, height);
+				newPos = new Vector2Int(x, y);
+
+				// Проверяем что не на старте, не на выходе и не на занятой позиции
+				validPosition = !((x == 0 && y == 0) ||
+								(x == width - 1 && y == height - 1) ||
+								usedPositions.Contains(newPos));
+				attempts++;
+			}
+			while (!validPosition && attempts < 100);
+
+			if (validPosition)
+			{
+				Vector3 pos = new Vector3(x * roomSize, 0f, y * roomSize);
+				Instantiate(KeyPrefab, pos, Quaternion.identity, transform);
+				usedPositions.Add(newPos);
+			}
+		}
+	}
 }

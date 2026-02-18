@@ -5,7 +5,7 @@ public class Health : MonoBehaviour    //класс, отвечающий за здоровье персонажа
 {
 	[Range(1, 100)]
 	[SerializeField] public int maximumHealth;    //максимально допустимое здоровье
-	[Range(1, 100)]
+	[Range(0, 100)]
 	[SerializeField] public int currentHealth;    //текущее здоровье
 
 	public UnityEvent<int, int> onHealthChange;    //ссылка на событие, срабатывающее при изменении текущего здоровья

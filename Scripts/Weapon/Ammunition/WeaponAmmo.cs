@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum WeaponTypes {Fireball, Machinegun }
+public enum WeaponTypes {Fireball, Machinegun, Cold }
 
 [Serializable]
 public class WeaponAmmo

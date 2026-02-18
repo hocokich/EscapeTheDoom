@@ -1,6 +1,6 @@
 
 public interface IWeapon
 {
-	public void fire();
+	public void attack();
 	public WeaponTypes getWeaponType();
 }

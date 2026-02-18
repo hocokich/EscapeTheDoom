@@ -7,10 +7,9 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon  //абстрактный кла
 	public float fireRate;             //частота выстрелов (может использоваться по разному)
 	public float damage;               //урон, наносимый оружием (механика нанесения может отличаться)
 	[HideInInspector]
-	public bool canFire = true;        //готово ли оружие к выстрелу
+	public bool canAttack = true;        //готово ли оружие к выстрелу
 	public ParticleSystem weaponEffect; //ссылка на эффект выстрела
-
-	public Sounds Sound;
+	public Sounds sounds;                //ссылка на звуки выстрела
 
 	private void Awake()
 	{
@@ -21,10 +20,10 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon  //абстрактный кла
 									  //установка длительности эффекта равной частоте выстрелов
 	}
 
-	public virtual void fire(Ammunition ammunition)    //метод стрельбы, который может быть переопределён в наследниках класса
+	public virtual void attack(Ammunition ammunition)    //метод стрельбы, который может быть переопределён в наследниках класса
 	{
 		if(ammunition.getAmmo(getWeaponType()) == false) return;
-		canFire = false;    //изменение состояние готовности оружия
+		canAttack = false;    //изменение состояние готовности оружия
 		StartCoroutine(coolDown());    //запуск обновления состояния оружия
 	}
 
@@ -40,16 +39,16 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon  //абстрактный кла
 	public IEnumerator coolDown()    //метод обновления состояния готовности оружия
 	{
 		yield return new WaitForSeconds(1 / fireRate);
-		canFire = true;
+		canAttack = true;
 	}
 
 	private void OnEnable()    //событие включения (enable = true) объекта
 	{
-		if (canFire == false)    //если оружие не готово к стрельбе
+		if (canAttack == false)    //если оружие не готово к стрельбе
 			StartCoroutine(coolDown()); //запуск процесса обновления готовности оружия
 	}
 
-	public void fire()
+	public void attack()
 	{
 		throw new System.NotImplementedException();
 	}

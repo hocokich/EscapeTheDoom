@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(TracerSystem))]    //для работы, класс требует компонент TracerSystem
@@ -13,17 +14,16 @@ public class CMachineGun : AbstractWeapon
 		machinegumLogic = GetComponent<MachinegunLogic>(); //получение ссылки на компонент обработки выстрела
 	}
 
-	public override void fire(Ammunition ammunition) //метод, описывающий стрельбу
+	public override void attack(Ammunition ammunition) //метод, описывающий стрельбу
 	{
-		base.fire(ammunition);    //вызов метода, описанного в классе "абстрактное оружие"
+		base.attack(ammunition);    //вызов метода, описанного в классе "абстрактное оружие"
 
 		StartCoroutine(stopEffect());
 
 		tracerSystem.CreateTracer(firePoint.position, firePoint.forward);
 		machinegumLogic.shot(firePoint, damage);    //обработка выстрела
 													//Здесь должен появится эффект
-		Sound.PlaySound(Sound.sounds[0]);           // Звук выстрела
-
+		sounds.PlayClip(sounds.clips[0]);           // Звук выстрела
 
 	}
 	public override WeaponTypes getWeaponType()

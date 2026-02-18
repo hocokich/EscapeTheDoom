@@ -46,7 +46,6 @@ public class SimpleFollowCamera : MonoBehaviour
     bool Locks() // проверка всех условий при которых камера не должна крутиться
 	{
 		if (GameManager.instance.isPaused) return true;  //если игра на паузе то не двигаем камерой
-		if (player.isCasting) return true;  //если кастует спел то камера не работает
 		if (player == null) return true;
 
         return false;

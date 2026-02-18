@@ -31,6 +31,6 @@ public class AmmunitionGUI : MonoBehaviour
 	{
 		foreach (KeyValuePair<WeaponTypes, int> kvp in ammunition.ammoDictionary)
 			if(weaponsDictionary.ContainsKey(kvp.Key))
-				weaponsDictionary[kvp.Key].text = "AMMO: " + kvp.Value.ToString();
+				weaponsDictionary[kvp.Key].text = $"{kvp.Value}";
 	}
 }

@@ -1,17 +1,23 @@
+using NUnit.Framework.Internal;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 using Color = UnityEngine.Color;
+using Random = UnityEngine.Random;
 
 public class EnemyAI : MonoBehaviour
 {
 	[Header("Loot")]
-	public GameObject flaskPrefab;
+	public List<GameObject> Loot = new List<GameObject>();  //список типов орудий и их боезапас
 
 	[Header("Health")]
 	public Health health;
+
 	[Header("Animator")]
 	public Animator animator;
 
@@ -34,11 +40,6 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Material")]
 	public Renderer enemyRenderer;
-	private Material originalMaterial;
-	private Material currentMaterial;
-	private Color originalColor;
-	private MaterialPropertyBlock propertyBlock;
-	private Coroutine flashCoroutine;
 
 	private Transform player;
     private NavMeshAgent agent;
@@ -46,15 +47,8 @@ public class EnemyAI : MonoBehaviour
     private Vector3 spawnPoint;
     private Vector3 patrolTarget;
     private float waitTimer;
-
-
 	void Start()
     {
-		// Создаем уникальную копию материала для этого врага
-		currentMaterial = enemyRenderer.material;          // Автоматически создает инстанс
-        originalMaterial = enemyRenderer.sharedMaterial;    // Сохраняем ссылку на оригинальный материал (опционально)
-		originalColor = enemyRenderer.material.color;
-
 		agent = GetComponent<NavMeshAgent>();
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -62,10 +56,11 @@ public class EnemyAI : MonoBehaviour
         spawnPoint = transform.position;
         SetNewPatrolPoint();
     }
-
     void Update()
     {
         if (health.currentHealth == 0) death();
+
+		animator.SetFloat("speed", agent.speed);
 
         float distance = Vector3.Distance(transform.position, player.position);
 
@@ -77,20 +72,20 @@ public class EnemyAI : MonoBehaviour
             if (cols.Length > 0)                                   //если игрок попал в радиус обнаружения
             {
                 agent.SetDestination(cols[0].transform.position);
-
                 isChasing = true;
             }
-            else
-            {
-                Patrol();
-            }
+            else Patrol();
         }
 
         if (isChasing)
         {
             agent.SetDestination(player.position);
 
-            animator.SetTrigger("attack");
+            if (Vector3.Distance(transform.position, player.position) <= attackRange) //если дистанция до игрока меньше дистанции атаки
+            {                                                                         //то пробуем атаковать
+				agent.speed = 0f;                   //стопаем нашего врага, чтобы он атаковал
+				animator.SetTrigger("attack");      //сзапускаем анимашку
+			}
 
             // Если игрок слишком далеко — враг теряет интерес
             if (distance > chaseRadius)
@@ -99,112 +94,146 @@ public class EnemyAI : MonoBehaviour
                 SetNewPatrolPoint();
             }
         }
-
-		//Если снизилась скорость
-		if (agent.speed < 3.5f)
-        {
-            agent.speed += 0.5f * Time.deltaTime;
-        }
 	}
 
-    public void hitTaken()
-    {
-        //замедляем после выстрела
-        agent.speed = 1.0f;
-
-		StartCoroutine(Flash());
-
-		//Color color = new Color(1f, 0.5f, 0.5f, 1f);
-		//currentMaterial.SetColor("_BaseColor", color);
-	}
-
-    public void dealDamage() //метод нанесения повреждений
-    {
-        if (Vector3.Distance(transform.position, player.position) <= attackRange) //если дистанция до игрока меньше дистанции атаки
-        {
-            Health playerHP = player.GetComponent<Health>(); //попытка получить ссылку на здоровье игрока
-            if (playerHP != null)
-                playerHP.hpDecrease(damage); //уменьшение здоровья игрока
-        }
-    }
-
-    void Patrol()
-    {
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
-        {
-            waitTimer += Time.deltaTime;
-            if (waitTimer >= patrolWaitTime)
-            {
+	void Patrol()
+	{
+		if (!agent.pathPending && agent.remainingDistance < 0.5f)
+		{
+			waitTimer += Time.deltaTime;
+			if (waitTimer >= patrolWaitTime)
+			{
 				// Звук преследования
-				Sound.PlaySound(Sound.sounds[0]);
+				//Sound.PlaySound(Sound.sounds[0]);
 
 				SetNewPatrolPoint();
-                waitTimer = 0f;
-            }
-        }
-    }
+				waitTimer = 0f;
+			}
+		}
+	}
+	void SetNewPatrolPoint()
+	{
+		Vector3 randomDir = Random.insideUnitSphere * patrolRadius;
+		randomDir += spawnPoint;
+		NavMeshHit hit;
 
-    void SetNewPatrolPoint()
+		if (NavMesh.SamplePosition(randomDir, out hit, patrolRadius, 1))
+		{
+			patrolTarget = hit.position;
+			agent.SetDestination(patrolTarget);
+		}
+	}
+
+	public void getDamage()
     {
-        Vector3 randomDir = Random.insideUnitSphere * patrolRadius;
-        randomDir += spawnPoint;
-        NavMeshHit hit;
+        //замедляем врага если по нему попали
+        agent.speed = 1.0f;
 
-        if (NavMesh.SamplePosition(randomDir, out hit, patrolRadius, 1))
-        {
-            patrolTarget = hit.position;
-            agent.SetDestination(patrolTarget);
-        }
-    }
-
-    bool CanSeePlayer()
+        //запускаем красное мигание
+		StartCoroutine(Flash());
+	}
+    public void onAttack() //метод нанесения повреждений, вызывается из анимации атаки
     {
-        Vector3 dirToPlayer = (player.position - transform.position).normalized;
+		if (Vector3.Distance(transform.position, player.position) <= attackRange) //если дистанция до игрока меньше дистанции атаки
+		{                                                                         //то наносим урон
+			Health playerHP = player.GetComponent<Health>(); //попытка получить ссылку на здоровье игрока
+			if (playerHP != null)
+				playerHP.hpDecrease(damage); //уменьшение здоровья игрока
+		}
+        //Возвращем скорость
+		StartCoroutine(backSpeed());
+	}
+	public void death()
+	{
+		addKillToPlayer();
 
-        if (Vector3.Angle(transform.forward, dirToPlayer) < viewAngle / 2f)
-        {
-            if (Physics.Raycast(transform.position + Vector3.up, dirToPlayer, out RaycastHit hit, viewRadius))
-            {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+		agent.speed = 0f;
 
-    void death()
+		animator.SetBool("dead", true);
+	}
+	public void onDeath()
+	{
+		Destroy(gameObject);
+		spawnItem();
+	}
+
+	void addKillToPlayer()
+	{
+		Player player = FindFirstObjectByType<Player>();
+		player.killCount++;
+		Debug.Log("Счетчик убийств: " + player.killCount);
+	}
+	void spawnItem()
     {
-        Destroy(gameObject);
-        spawnFlask();
-    }
 
-    void spawnFlask()
-    {
-        Instantiate(flaskPrefab, transform.position, Quaternion.identity);
-    }
+		Vector3 spawnPos = transform.position;		//Приподнимаем дроп (костыль)
+		spawnPos.y = 0f;
 
+		try
+		{
+			Instantiate(RandomItem(), spawnPos, Quaternion.identity);
+		}
+		catch
+		{
+			Debug.Log("Предмета нет");
+		}
+	}
+
+	GameObject RandomItem()
+	{
+		int roll = Random.Range(0, 100);
+
+		if (roll< 50) return null;
+		if (roll< 75) return Loot[1];
+		return Loot[0];
+
+	}
 	private IEnumerator Flash()
 	{
-		// Меняем на красный
-		enemyRenderer.material.color = Color.red;
+		// Включаем свечение и устанавливаем HDR красный цвет
+		enemyRenderer.material.EnableKeyword("_EMISSION");
+
+		// Для HDR цвета используем Color.red с высокой интенсивностью
+		// Например, Color.red * 0.1f для яркого свечения
+		enemyRenderer.material.SetColor("_EmissionColor", Color.red * 0.2f);
 
 		// Ждем немного
 		yield return new WaitForSeconds(0.1f);
 
-		// Плавно возвращаем обратный цвет
+		// Плавно уменьшаем свечение
 		float timer = 0f;
 		float duration = 0.5f;
 
 		while (timer < duration)
 		{
 			timer += Time.deltaTime;
-			enemyRenderer.material.color = Color.Lerp(Color.red, originalColor, timer / duration);
+
+			float intensity = Mathf.Lerp(0.2f, 0f, timer / duration);
+			enemyRenderer.material.SetColor("_EmissionColor", Color.red * intensity);
+
+			agent.speed += 0.5f;
+
+            yield return null;
+		}
+		// Полностью выключаем свечение
+		enemyRenderer.material.SetColor("_EmissionColor", Color.black);
+	}
+    private IEnumerator backSpeed()
+    {
+		// Ждем немного
+		yield return new WaitForSeconds(0.1f);
+
+		// Плавно возвращаем обратный цвет
+		float timer = 0f;
+		float duration = 3.5f;
+
+		while (timer < duration)
+		{
+			timer += Time.deltaTime;
+
+			agent.speed += 1f * Time.deltaTime;
+
 			yield return null;
 		}
-
-		// Гарантируем точный цвет
-		enemyRenderer.material.color = originalColor;
 	}
 }

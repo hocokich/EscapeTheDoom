@@ -19,17 +19,10 @@ public class MachinegunLogic : MonoBehaviour
 		{
 			for (int i = 0; i < Mathf.Min(piercingPower, hits.Length); i++)    //для каждого пересечения, начиная с ближайшего
 			{
-				Health enemy = hits[i].transform.GetComponent<Health>();
+				Health enemyHealth = hits[i].transform.GetComponent<Health>();
 
-				enemy.hpDecrease(damage);
+				enemyHealth.hpDecrease(damage);
 				
-				//Destroy(hits[i].transform); // убиваем врага
-
-				/*				Health enemyHP = hits[i].transform.GetComponent<Health>();    //попытка получить ссылку на здоровье противника
-								if (enemyHP != null)
-								{
-									enemyHP.hpDecrease(damage);    //уменьшение здоровья противника
-								}*/
 			}
 		}
 	}

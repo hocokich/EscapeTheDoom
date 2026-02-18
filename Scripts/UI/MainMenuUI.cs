@@ -33,6 +33,8 @@ public class MainMenuUI : MonoBehaviour
 
 		//Sound.PlaySound(Sound.sounds[0]);
 	}
+
+	[System.Obsolete]
 	private IEnumerator FindUINextFrame()
 	{
 		yield return null; // ждём 1 кадр
@@ -88,7 +90,9 @@ public class MainMenuUI : MonoBehaviour
 	{
 		if (optionsPanel) optionsPanel.SetActive(true);
 	}
+
 	// ---------- Методы определения кнопок и панелей ----------
+	[System.Obsolete]
 	private GameObject FindObjectByName(string name)
 	{
 		switch (name)
@@ -116,6 +120,8 @@ public class MainMenuUI : MonoBehaviour
 		}
 
 	}
+
+	[System.Obsolete]
 	private void BindButton(string buttonName, UnityEngine.Events.UnityAction action)
 	{
 		Button[] buttons = GameObject.FindObjectsOfType<Button>(true); // true = ищем и среди выключенных

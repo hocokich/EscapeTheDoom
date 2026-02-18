@@ -7,6 +7,6 @@ public class HealthGUI : MonoBehaviour
 
 	public void updateHealth(int currentHealth, int maximumHealth)
 	{
-		healthTect.text = "HEALTH: " + currentHealth.ToString() + "/" + maximumHealth.ToString();
+		healthTect.text = currentHealth.ToString() + "%";
 	}
 }

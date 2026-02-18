@@ -5,6 +5,7 @@ using System.Collections;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using System;
+using Unity.VisualScripting;
 //using static UnityEditor.Experimental.GraphView.GraphView;      
 
 public class GameManager : MonoBehaviour
@@ -31,11 +32,12 @@ public class GameManager : MonoBehaviour
 	public bool isPaused = false;
 
     public GameObject player;
-    [NonSerialized]
+
+	[NonSerialized]
 	public Player _PreviusPlayer;
 	[SerializeField]
 	public GameObject MainCamera;
-    public Sounds Sound => GetComponent<Sounds>();
+    public Sounds sounds => GetComponent<Sounds>();
 
 	[System.Obsolete]
 	void Awake()
@@ -56,12 +58,14 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-    void OnEnable()
+	[Obsolete]
+	void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDisable()
+	[Obsolete]
+	void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
@@ -76,10 +80,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // --- Когда сцена загружена ---
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	// --- Когда сцена загружена ---
+	[Obsolete]
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-		Sound.StopSound();
+		sounds.StopSound();
 
 		Time.timeScale = 1f;
         isPaused = false;
@@ -88,10 +93,11 @@ public class GameManager : MonoBehaviour
         // запускаем поиск панелей и кнопок через один кадр
         StartCoroutine(FindUINextFrame());
 
-		Sound.PlaySound(Sound.sounds[0]);
+		sounds.PlayClip(sounds.clips[0]);
 	}
 
-    private IEnumerator FindUINextFrame()
+	[Obsolete]
+	private IEnumerator FindUINextFrame()
     {
         yield return null; // ждём 1 кадр
 
@@ -100,8 +106,8 @@ public class GameManager : MonoBehaviour
         //
         MainCamera = FindObjectByName("Main Camera");
 
-        // панели
-        pausePanel = FindObjectByName("PausePanel");
+		// панели
+		pausePanel = FindObjectByName("PausePanel");
         winPanel = FindObjectByName("WinPanel");
         losePanel = FindObjectByName("LosePanel");
         optionsPanel = FindObjectByName("OptionsPanel");
@@ -143,6 +149,7 @@ public class GameManager : MonoBehaviour
     }
 
 	// --- Поиск объекта по имени среди любых RectTransform ---
+	[Obsolete]
 	private GameObject FindPlayer(string name)
     {
 		Player[] players = FindObjectsOfType<Player>();
@@ -156,6 +163,8 @@ public class GameManager : MonoBehaviour
 		Debug.Log("Игрок не найден");
 		return null;
 	}
+
+	[Obsolete]
 	private GameObject FindObjectByName(string name)
     {
 		switch (name)
@@ -184,7 +193,8 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void BindButton(string buttonName, UnityEngine.Events.UnityAction action)
+	[Obsolete]
+	private void BindButton(string buttonName, UnityEngine.Events.UnityAction action)
     {
         Button[] buttons = GameObject.FindObjectsOfType<Button>(true); // true = ищем и среди выключенных
         foreach (var btn in buttons)
