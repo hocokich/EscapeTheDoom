@@ -145,7 +145,6 @@ public class EnemyAI : MonoBehaviour
 	}
 	public void death()
 	{
-		addKillToPlayer();
 
 		agent.speed = 0f;
 
@@ -153,25 +152,30 @@ public class EnemyAI : MonoBehaviour
 	}
 	public void onDeath()
 	{
+		addKillToPlayer();
 		Destroy(gameObject);
 		spawnItem();
 	}
 
 	void addKillToPlayer()
 	{
-		Player player = FindFirstObjectByType<Player>();
-		player.killCount++;
-		Debug.Log("Счетчик убийств: " + player.killCount);
+		GameObject.Find("Player").GetComponent<Player>().killCount++;
 	}
 	void spawnItem()
     {
-
 		Vector3 spawnPos = transform.position;		//Приподнимаем дроп (костыль)
 		spawnPos.y = 0f;
+		Vector3 spawnPosEar = spawnPos;
+		spawnPosEar.z += 0.1f;
 
 		try
 		{
+			//Всегда спавним ухо
+			Instantiate(Loot[2], spawnPosEar, Quaternion.identity);
+
+			//Спавним рандомный лут
 			Instantiate(RandomItem(), spawnPos, Quaternion.identity);
+
 		}
 		catch
 		{

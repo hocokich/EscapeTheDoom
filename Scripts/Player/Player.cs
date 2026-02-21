@@ -13,7 +13,9 @@ public class Player : MonoBehaviour
     public float JumpHeight = 1.5f;
     public float Gravity = -20f;
 	private float _h;					// A/D - horizontal move
-	private float _v;					// W/S - vertical move
+	private float _v;                   // W/S - vertical move
+	public bool CanMove;
+	public int Ears;
 
 	[Header("Sounds")]
     public Sounds Sounds;
@@ -24,7 +26,7 @@ public class Player : MonoBehaviour
 	public List<GameObject> Weapons;    //список типов орудий и их боезапас
 	public UnityEvent OnShootChange;     //событие, срабатывающее при изменении боезапаса
 	public UnityEvent OnCutChange;     //событие, срабатывающее при изменении боезапаса
-	public int killCount;               //счетчик убийств 
+	public int killCount;               //счетчик убийств
 	public int Keys;					//Счетчик ключей
 
 	public Animator AnimWeaponCam;      //анимация оружия
@@ -51,6 +53,9 @@ public class Player : MonoBehaviour
 		{
 			Health.currentHealth = PreviusPlayer.Health.currentHealth;
             Ammunition.ammoDictionary = PreviusPlayer.Ammunition.ammoDictionary;
+			killCount = PreviusPlayer.killCount;
+			Ears = PreviusPlayer.killCount;
+			Keys = PreviusPlayer.Keys;
 		}
 
 		CurWeaponIndex = 1;
@@ -70,7 +75,7 @@ public class Player : MonoBehaviour
         if (CC.isGrounded && Velocity.y < 0)
             Velocity.y = -2f;
 
-		_inputPlayer();
+		inputPlayer();
 
 		_soundSteps();
 
@@ -123,12 +128,13 @@ public class Player : MonoBehaviour
         return moveDir;
 	}
 
-	void _inputPlayer()						//Управление вводом игрока
+	public void inputPlayer()                     //Управление вводом игрока
 	{
+		if (!CanMove) return;
 		// --- перемещение ---
 		_h = Input.GetAxisRaw("Horizontal"); // A/D
 		_v = Input.GetAxisRaw("Vertical");   // W/S
-											// --- Прыжок ---
+											 // --- Прыжок ---
 		if (Input.GetButtonDown("Jump") && CC.isGrounded)
 		{
 			Velocity.y = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -141,7 +147,7 @@ public class Player : MonoBehaviour
 
 			AnimWeaponCam.SetTrigger("change");
 
-			PrevWeaponIndex = CurWeaponIndex;	//записываем предыдущее
+			PrevWeaponIndex = CurWeaponIndex;   //записываем предыдущее
 			CurWeaponIndex = 1;
 		}
 		if (Input.GetKeyDown("2"))
@@ -155,7 +161,8 @@ public class Player : MonoBehaviour
 		}
 
 		// --- Если персонаж на земле и нажал кнопку выстрела, то произойдет попытка выстрела ---
-		if (Input.GetMouseButtonDown(0) && CC.isGrounded) _tryAttack(CurWeaponIndex);
+		if (Input.GetMouseButton(0) && CC.isGrounded)
+			_tryAttack(CurWeaponIndex);
 	}
 	void _soundSteps()					   //Управление звуками шагов
 	{

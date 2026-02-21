@@ -11,7 +11,10 @@ public class ExitPortal : MonoBehaviour
 	{
 		if (other.CompareTag("Player"))
 			if (FindInactiveObject("Maze").GetComponent<MazeGenerator>().Keys == GameManager.instance.player.GetComponent<Player>().Keys)
+			{
 				GameManager.instance.Win();
+				GameObject.Find("Player").GetComponent<Player>().Keys = 0;
+			}
 			else
 			{
 				Message();

@@ -72,13 +72,32 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene" && Input.GetKeyDown(KeyCode.Escape))
+        if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            if (!isPaused) Pause();
-			else if (optionsPanel.activeSelf) optionsPanel.SetActive(false);
-			else Resume();
+			player.GetComponent<Player>().CanMove = true;
+
+			if (Input.GetKeyDown(KeyCode.Escape))
+			{
+				if (!isPaused) Pause();
+				else if (optionsPanel.activeSelf) optionsPanel.SetActive(false);
+				else Resume();
+			}
         }
-    }
+
+		if(SceneManager.GetActiveScene().name == "Trader")
+		{
+			player.GetComponent<Player>().CanMove = false;
+
+			Cursor.lockState = CursorLockMode.None;
+
+			if (Input.GetKeyDown(KeyCode.Escape))
+			{
+				if (!isPaused) Pause();
+				else if (optionsPanel.activeSelf) optionsPanel.SetActive(false);
+				else Resume();
+			}
+		}
+	}
 
 	// --- Когда сцена загружена ---
 	[Obsolete]
@@ -260,17 +279,25 @@ public class GameManager : MonoBehaviour
     public void NextLevel()
     {
 		instance._PreviusPlayer = player.GetComponent<Player>();
-		instance.level++;
 		instance.mazeSize += mazeStep;
 
 		instance.GlobalVolume = GlobalVolume;
 		instance.aoFeature = aoFeature;
 
 		Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+		if(instance.level%2 == 0)
+		{
+			SceneManager.LoadScene("Trader");
+			return;
+		}
+
+		instance.level++;
+
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
-    public void GoToMenu()
+	public void GoToMenu()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
@@ -311,6 +338,21 @@ public class GameManager : MonoBehaviour
 	//		OldMonitorPanel.SetActive(true);
 	//	}
 	//}
+
+	public void NextLvlFromTrader()
+	{
+		instance._PreviusPlayer = player.GetComponent<Player>();
+
+		instance.GlobalVolume = GlobalVolume;
+		instance.aoFeature = aoFeature;
+
+		Time.timeScale = 1f;
+
+		instance.level++;
+
+		SceneManager.LoadScene("GameScene");
+	}
+
 	public void PostProcess()
 	{
 		GlobalVolume.gameObject.SetActive(!GlobalVolume.gameObject.activeSelf);
