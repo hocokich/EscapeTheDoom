@@ -12,5 +12,7 @@ public class Key : AbstractItem
 	{
 		player.GetComponent<Player>().Keys++;
 			Destroy(gameObject);
+		//¬кл звук подбора
+		player.GetComponent<Player>().PickUpItemSound();
 	}
 }

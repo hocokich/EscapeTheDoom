@@ -9,7 +9,7 @@ public class HealKitDialog : MonoBehaviour
 	{
 		//Находим игрока и вписываем ему хп
 		GameObject.Find("Player").GetComponent<Player>().Ears -= 5;
-		GameObject.Find("Player").GetComponent<Health>().changeHealth(Heal);
+		GameObject.Find("Player").GetComponent<Health>().hpIncrease(Heal);
 
 		//Передаем в диалог что сделка завершена успешно
 		GameObject DialogCanvas = GameObject.Find("DialogCanvas");

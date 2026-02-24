@@ -23,8 +23,8 @@ public class Health : MonoBehaviour    //класс, отвечающий за здоровье персонажа
 
 		currentHealth += amount;
 
-		if (currentHealth > maximumHealth)
-			currentHealth = maximumHealth;
+		//if (currentHealth > maximumHealth)
+		//	currentHealth = maximumHealth;
 
 		if (currentHealth < 0)
 			currentHealth = 0;

@@ -16,7 +16,7 @@ public class DialogTrader : MonoBehaviour
 	{
 		player = GameObject.Find("Player").GetComponent<Player>();
 
-		GameObject.Find("Player").GetComponent<Player>().Ears += 1;
+		GameObject.Find("Player").GetComponent<Player>().Ears += 10;
 
 		//Question = QuestionTitle.GetComponent<TextMeshPro>();
 		TradeItems.SetActive(false);

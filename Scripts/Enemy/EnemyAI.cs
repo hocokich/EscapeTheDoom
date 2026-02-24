@@ -166,16 +166,16 @@ public class EnemyAI : MonoBehaviour
 		Vector3 spawnPos = transform.position;		//Приподнимаем дроп (костыль)
 		spawnPos.y = 0f;
 		Vector3 spawnPosEar = spawnPos;
-		spawnPosEar.z += 0.1f;
+		spawnPosEar.z += 0.5f; //чуть чуть в бок
+		spawnPosEar.y += 0.05f; //чуть чуть вверх
 
 		try
 		{
 			//Всегда спавним ухо
-			Instantiate(Loot[2], spawnPosEar, Quaternion.identity);
+			Instantiate(Loot[2], spawnPosEar, Loot[2].transform.rotation);
 
 			//Спавним рандомный лут
 			Instantiate(RandomItem(), spawnPos, Quaternion.identity);
-
 		}
 		catch
 		{

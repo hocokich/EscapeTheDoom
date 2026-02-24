@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
 			Health.currentHealth = PreviusPlayer.Health.currentHealth;
             Ammunition.ammoDictionary = PreviusPlayer.Ammunition.ammoDictionary;
 			killCount = PreviusPlayer.killCount;
-			Ears = PreviusPlayer.killCount;
+			Ears = PreviusPlayer.Ears;
 			Keys = PreviusPlayer.Keys;
 		}
 
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
 
 		inputPlayer();
 
-		_soundSteps();
+		//_soundSteps();
 
 		//управление поворотом персонажа
 		CC.Move(_ccDirection(_h, _v) * MoveSpeed * Time.deltaTime);
@@ -164,6 +164,7 @@ public class Player : MonoBehaviour
 		if (Input.GetMouseButton(0) && CC.isGrounded)
 			_tryAttack(CurWeaponIndex);
 	}
+	//Управление звуками
 	void _soundSteps()					   //Управление звуками шагов
 	{
 		bool isMoving = Mathf.Abs(_h) > 0.1f || Mathf.Abs(_v) > 0.1f;
@@ -181,7 +182,10 @@ public class Player : MonoBehaviour
 			Sounds.StopSound();                     // Мгновенно останавливаем звук
 		}
 	}
-
+	public void PickUpItemSound()
+	{
+		Sounds.PlayClip(Sounds.clips[1]);
+	}
 	public IEnumerator _backSpeed(float etalon)	//Медленное возвращение скорости игроку
 	{
 		// Ждем немного и начием возвращать

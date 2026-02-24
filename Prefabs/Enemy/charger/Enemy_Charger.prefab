@@ -1031,7 +1031,7 @@ MonoBehaviour:
   Loot:
   - {fileID: 1279140426991430450, guid: cbef86f16bf73314398e9ea66e8f8357, type: 3}
   - {fileID: 7145165998672086327, guid: c508bcc33adb6f64f80caac9b3f58c4b, type: 3}
-  - {fileID: 326076215055414552, guid: 31c80832460d5cd41ae562858f6da165, type: 3}
+  - {fileID: 2944702419443858048, guid: feaff3cd5d8a4884eb4091f3dfd37239, type: 3}
   health: {fileID: 8640481264120012477}
   animator: {fileID: 2088094223983549770}
   attackRange: 1

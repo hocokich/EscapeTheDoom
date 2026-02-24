@@ -11,5 +11,7 @@ public class Ear : MonoBehaviour
 	{
 		player.GetComponent<Player>().Ears++;
 		Destroy(gameObject);
+		//¬кл звук подбора
+		player.GetComponent<Player>().PickUpItemSound();
 	}
 }

@@ -15,5 +15,7 @@ public class AmmoPack : AbstractItem
     {
         if (player.GetComponent<Ammunition>().addAmmo(WeaponTypes.Machinegun, Ammo))
             Destroy(gameObject);
+        //¬кл звук подбора
+        player.GetComponent<Player>().PickUpItemSound();
     }
 }

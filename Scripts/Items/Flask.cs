@@ -13,7 +13,11 @@ public class Flask : AbstractItem
 
     new public void onPickUp(GameObject player)    //метод, вызываемый при подборе аптечки
     {
-        if (player.GetComponent<Health>().changeHealth(Heal))
-            Destroy(gameObject);
-    }
+        player.GetComponent<Health>().hpIncrease(Heal);
+
+        Destroy(gameObject);
+
+		//¬кл звук подбора
+		player.GetComponent<Player>().PickUpItemSound();
+	}
 }
