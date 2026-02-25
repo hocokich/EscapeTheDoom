@@ -36,7 +36,7 @@ public class EnemyAI : MonoBehaviour
 	public LayerMask playerLayer;
 
 	[Header("Sounds")]
-	public Sounds Sound;
+	public Sounds Sounds;
 
     [Header("Material")]
 	public Renderer enemyRenderer;
@@ -79,7 +79,10 @@ public class EnemyAI : MonoBehaviour
 
         if (isChasing)
         {
-            agent.SetDestination(player.position);
+			// Звук преследования
+			//Sounds.PlayClip(Sounds.clips[0]);
+
+			agent.SetDestination(player.position);
 
             if (Vector3.Distance(transform.position, player.position) <= attackRange) //если дистанция до игрока меньше дистанции атаки
             {                                                                         //то пробуем атаковать
@@ -103,8 +106,6 @@ public class EnemyAI : MonoBehaviour
 			waitTimer += Time.deltaTime;
 			if (waitTimer >= patrolWaitTime)
 			{
-				// Звук преследования
-				//Sound.PlaySound(Sound.sounds[0]);
 
 				SetNewPatrolPoint();
 				waitTimer = 0f;
@@ -126,8 +127,10 @@ public class EnemyAI : MonoBehaviour
 
 	public void getDamage()
     {
-        //замедляем врага если по нему попали
-        agent.speed = 1.0f;
+		Sounds.PlayClip(Sounds.clips[2]);
+
+		//замедляем врага если по нему попали
+		agent.speed = 1.0f;
 
         //запускаем красное мигание
 		StartCoroutine(Flash());
@@ -138,15 +141,19 @@ public class EnemyAI : MonoBehaviour
 		{                                                                         //то наносим урон
 			Health playerHP = player.GetComponent<Health>(); //попытка получить ссылку на здоровье игрока
 			if (playerHP != null)
+			{
+				Sounds.PlayClip(Sounds.clips[1]); //Звук попадания по игроку
 				playerHP.hpDecrease(damage); //уменьшение здоровья игрока
+			}
 		}
         //Возвращем скорость
 		StartCoroutine(backSpeed());
 	}
 	public void death()
 	{
-
 		agent.speed = 0f;
+
+		Sounds.PlayClip(Sounds.clips[3]);
 
 		animator.SetBool("dead", true);
 	}

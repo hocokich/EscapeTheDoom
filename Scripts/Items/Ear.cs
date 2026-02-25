@@ -7,7 +7,7 @@ public class Ear : MonoBehaviour
 		if (other.CompareTag("Player"))
 			onPickUp(other.gameObject);
 	}
-	new public void onPickUp(GameObject player)    //метод, вызываемый при подборе аптечки
+	public void onPickUp(GameObject player)    //метод, вызываемый при подборе аптечки
 	{
 		player.GetComponent<Player>().Ears++;
 		Destroy(gameObject);

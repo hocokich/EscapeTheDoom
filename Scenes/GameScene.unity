@@ -7311,7 +7311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d1833f048d6da49a433227f93f8ccf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volume: 0
+  volume: 0.2
   clips:
   - {fileID: 8300000, guid: c8ad36652d8d7e946af9c79a7e38d01c, type: 3}
   isPlaying: 0

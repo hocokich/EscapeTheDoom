@@ -503,7 +503,7 @@ MonoBehaviour:
   m_text: Play new
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7f06910f98f0bd34a860445a13a76744, type: 2}
-  m_sharedMaterial: {fileID: 7414459382904150594, guid: 7f06910f98f0bd34a860445a13a76744, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 23997f7b43057fa40868d18d1f155b9f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1976,7 +1976,7 @@ MonoBehaviour:
   m_text: Quit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7f06910f98f0bd34a860445a13a76744, type: 2}
-  m_sharedMaterial: {fileID: 7414459382904150594, guid: 7f06910f98f0bd34a860445a13a76744, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 23997f7b43057fa40868d18d1f155b9f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
