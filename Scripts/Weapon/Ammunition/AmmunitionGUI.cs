@@ -17,6 +17,7 @@ public class AmmunitionGUI : MonoBehaviour
 	public List<WeaponGUI> weaponsList;    //список элементов интерфейса
 	Dictionary<WeaponTypes, TMP_Text> weaponsDictionary;    //словарь элементов интерфейса
 
+
 	public void listToDictionary()    //метод, преобразующий список в словарь
 	{
 		weaponsDictionary = new Dictionary<WeaponTypes, TMP_Text>();
@@ -25,7 +26,12 @@ public class AmmunitionGUI : MonoBehaviour
 				weaponsDictionary.Add(weapon.weaponType, weapon.text);
 	}
 
-	private void Start() => listToDictionary();
+	private void Start()
+	{
+		listToDictionary();
+
+		ammunition = GameObject.Find("Player").GetComponent<Ammunition>();
+	}
 
 	public void updateGUI()
 	{

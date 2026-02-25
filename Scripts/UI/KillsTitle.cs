@@ -4,9 +4,11 @@ using UnityEngine;
 public class KillsTitle : MonoBehaviour
 {
 	[SerializeField] TMP_Text killCount;
-	public Player player;
-    void Update()
+
+	void Update()
     {
-		killCount.text = "Kills: " + player.killCount.ToString();
+		int kc = GameObject.Find("Player").GetComponent<Player>().killCount;
+
+		killCount.text = "Kills: " + kc.ToString();
 	}
 }

@@ -1,5 +1,8 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
+using NUnit.Framework;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class DialogTrader : MonoBehaviour
 {
@@ -12,35 +15,45 @@ public class DialogTrader : MonoBehaviour
 	Player player;
 	string question;
 
+	bool used = false;
+
 	void Awake()
 	{
-		player = GameObject.Find("Player").GetComponent<Player>();
 
-		GameObject.Find("Player").GetComponent<Player>().Ears += 10;
-
-		//Question = QuestionTitle.GetComponent<TextMeshPro>();
 		TradeItems.SetActive(false);
 
 		ButtonYES.SetActive(false);
 		ButtonNO.SetActive(false);
 	}
+
 	void Update()
 	{
+		player = GameObject.Find("Player").GetComponent<Player>();
+
 		QuestionTitle.GetComponent<TMP_Text>().text = question;
+
+		Questions();
 	}
 
-	void Start()
+	public void Questions()
 	{
-		if(player.Ears == 0)
+		if (used) return;
+		//GameObject.Find("Player").GetComponent<Player>().Ears += 10;
+
+		if (player.Ears == 0)
 		{
 			question = "Тебе нечего мне предложить ...";
 			NextLvl();
+			used = true;
+
 			return;
 		}
 		if (player.Ears > 0 && player.Ears < 5)
 		{
 			question = "Хоть что то нашёл, но маловато ...";
 			NextLvl();
+			used = true;
+
 			return;
 		}
 		if (player.Ears >= 5)
@@ -48,6 +61,8 @@ public class DialogTrader : MonoBehaviour
 			question = "Ого, не плох. Давай поторгуем ?";
 			ButtonYES.SetActive(true);
 			ButtonNO.SetActive(true);
+			used = true;
+
 			return;
 		}
 	}
@@ -89,7 +104,11 @@ public class DialogTrader : MonoBehaviour
 
 	public void NextLvl()
 	{
+		StartCoroutine(DelayedNextLevel());
+	}
+	IEnumerator DelayedNextLevel()
+	{
+		yield return new WaitForSeconds(2f); // ждем 2 секунды
 		GameManager.instance.NextLvlFromTrader();
-		//Фейд и переход на новый уровень
 	}
 }

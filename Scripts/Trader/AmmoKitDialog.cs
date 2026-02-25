@@ -3,7 +3,7 @@ using UnityEngine;
 public class AmmoKitDialog : MonoBehaviour
 {
 	[Header("Ammo")]
-	public int Ammo = 5;
+	public int Ammo;
 
 	private void OnMouseDown()
 	{

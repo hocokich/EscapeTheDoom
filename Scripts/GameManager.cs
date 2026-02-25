@@ -6,6 +6,8 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.Events;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 //using static UnityEditor.Experimental.GraphView.GraphView;      
 
 public class GameManager : MonoBehaviour
@@ -22,7 +24,8 @@ public class GameManager : MonoBehaviour
     private GameObject winPanel;
     private GameObject losePanel;
     private GameObject optionsPanel;
-
+	//Fade
+	private GameObject Fade;
 	// Эффекты
 	public GameObject GlobalVolume;
 	private ScriptableRendererFeature aoFeature;
@@ -70,7 +73,7 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    void Update()
+	void Update()
     {
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
@@ -84,7 +87,7 @@ public class GameManager : MonoBehaviour
 			}
         }
 
-		if(SceneManager.GetActiveScene().name == "Trader")
+		if (SceneManager.GetActiveScene().name == "Trader")
 		{
 			player.GetComponent<Player>().CanMove = false;
 
@@ -130,6 +133,7 @@ public class GameManager : MonoBehaviour
         winPanel = FindObjectByName("WinPanel");
         losePanel = FindObjectByName("LosePanel");
         optionsPanel = FindObjectByName("OptionsPanel");
+		Fade = FindObjectByName("Fade");
 
 		HideAllPanels();
 
@@ -272,22 +276,30 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         instance.level = 1;
+        instance.mazeSize = 5;
 		Time.timeScale = 1f;
         SceneManager.LoadScene("GameScene");
     }
-
     public void NextLevel()
     {
+		//Выключаем свет
+		Fade.SetActive(true);
+		Fade.GetComponent<LevelFade>().FadeOn();
+
+		//Переносим настройки в новую сцену
 		instance._PreviusPlayer = player.GetComponent<Player>();
 		instance.mazeSize += mazeStep;
 
 		instance.GlobalVolume = GlobalVolume;
 		instance.aoFeature = aoFeature;
 
+		//Запускаем время, чтобы там включилось. Наверное это можно писать в Старте, но я хз, работает и ладно
 		Time.timeScale = 1f;
 
-		if(instance.level%2 == 0)
+		//Перекидываем игрока на трейдера, каждый второй уровень
+		if (instance.level % 2 == 0)
 		{
+			instance.level++;
 			SceneManager.LoadScene("Trader");
 			return;
 		}
@@ -295,6 +307,23 @@ public class GameManager : MonoBehaviour
 		instance.level++;
 
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+
+	}
+	public void NextLvlFromTrader()
+	{
+		//Выключаем свет
+		Fade.SetActive(true);
+		Fade.GetComponent<LevelFade>().FadeOn();
+
+		instance._PreviusPlayer = player.GetComponent<Player>();
+
+		instance.GlobalVolume = GlobalVolume;
+		instance.aoFeature = aoFeature;
+
+		Time.timeScale = 1f;
+
+		SceneManager.LoadScene("GameScene");
 	}
 
 	public void GoToMenu()
@@ -302,12 +331,10 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
-
     public void OptionsGame()
     {
 		optionsPanel.SetActive(!optionsPanel.activeSelf);
 	}
-
 	public void QuitGame()
     {
 #if UNITY_EDITOR
@@ -316,41 +343,11 @@ public class GameManager : MonoBehaviour
         Application.Quit();
 #endif
 	}
-
 	// ---------- Кнопки настроек ----------
 
 	public void BackToPause()
 	{
 		optionsPanel.SetActive(!optionsPanel.activeSelf);
-	}
-
-	//public void OldMonitorMode()
-	//{
- //       if (OldMonitorPanel.activeSelf)
- //       {
-	//		CameraPixelize.SetActive(false);
-	//		OldMonitorPanel.SetActive(false);
-
-	//	}
- //       else
- //       {
-	//		CameraPixelize.SetActive(true);
-	//		OldMonitorPanel.SetActive(true);
-	//	}
-	//}
-
-	public void NextLvlFromTrader()
-	{
-		instance._PreviusPlayer = player.GetComponent<Player>();
-
-		instance.GlobalVolume = GlobalVolume;
-		instance.aoFeature = aoFeature;
-
-		Time.timeScale = 1f;
-
-		instance.level++;
-
-		SceneManager.LoadScene("GameScene");
 	}
 
 	public void PostProcess()
@@ -417,5 +414,18 @@ public class GameManager : MonoBehaviour
 		Debug.LogWarning("Ambient Occlusion feature не найден!");
 	}
 
+	//public void OldMonitorMode()
+	//{
+	//       if (OldMonitorPanel.activeSelf)
+	//       {
+	//		CameraPixelize.SetActive(false);
+	//		OldMonitorPanel.SetActive(false);
 
+	//	}
+	//       else
+	//       {
+	//		CameraPixelize.SetActive(true);
+	//		OldMonitorPanel.SetActive(true);
+	//	}
+	//}
 }

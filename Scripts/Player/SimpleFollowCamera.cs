@@ -21,7 +21,7 @@ public class SimpleFollowCamera : MonoBehaviour
 
 		// Запоминаем ТВОЮ расстановку из сцены
 		Vector3 playerPos = player.GetComponent<Transform>().position;
-        offset = new Vector3(playerPos.x, playerPos.y + 0.6f, playerPos.z -0.5f);
+        offset = new Vector3(playerPos.x, playerPos.y + 0.6f);
 		initRot = transform.rotation;
 
         Cursor.lockState = CursorLockMode.Locked; // при желании убери

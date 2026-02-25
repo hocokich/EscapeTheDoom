@@ -1,57 +1,44 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RotatingLight : MonoBehaviour
+public class PersistentRotatingLight : MonoBehaviour
 {
-	public float rotationSpeed = 10f; // скорость вращения в градусах в секунду
-	public Vector3 rotationAxis = Vector3.up; // ось вращения (по умолчанию Y)
+	public float rotationSpeed = 10f;
+	public Vector3 rotationAxis = Vector3.up;
 
-	private void Start()
+	private static PersistentRotatingLight instance;
+
+	private void Awake()
 	{
-		// Делаем объект неуничтожаемым при загрузке новых сцен
-		DontDestroyOnLoad(gameObject);
-
-		// Загружаем сохраненный угол поворота
-		LoadRotation();
+		// Паттерн Singleton для гарантии единственного экземпляра
+		if (instance == null)
+		{
+			instance = this;
+			DontDestroyOnLoad(gameObject);
+			LoadRotation();
+		}
+		else
+		{
+			Destroy(gameObject); // Удаляем дубликат при возвращении в сцену
+		}
 	}
 
 	private void Update()
 	{
-		// Вращаем свет
 		transform.Rotate(rotationAxis * rotationSpeed * Time.deltaTime);
-
-		// Сохраняем текущий угол (можно реже для оптимизации)
-		SaveRotation();
-	}
-
-	void SaveRotation()
-	{
-		// Сохраняем угол поворота по оси Y (или по нужной оси)
-		PlayerPrefs.SetFloat("LightRotationY", transform.eulerAngles.y);
-		PlayerPrefs.Save();
 	}
 
 	void LoadRotation()
 	{
-		// Загружаем сохраненный угол, если он есть
 		if (PlayerPrefs.HasKey("LightRotationY"))
 		{
-			float savedAngle = PlayerPrefs.GetFloat("LightRotationY");
-			Vector3 currentRotation = transform.eulerAngles;
-			currentRotation.y = savedAngle;
-			transform.eulerAngles = currentRotation;
+			float x = PlayerPrefs.GetFloat("LightRotationX");
+			float y = PlayerPrefs.GetFloat("LightRotationY");
+			float z = PlayerPrefs.GetFloat("LightRotationZ");
+
+			transform.eulerAngles = new Vector3(x, y, z);
+
+			Debug.Log($"Свет загружен: {transform.eulerAngles}");
 		}
-	}
-
-	// Опционально: очистка сохраненных данных
-	public void ResetRotation()
-	{
-		PlayerPrefs.DeleteKey("LightRotationY");
-	}
-
-	private void OnDestroy()
-	{
-		// Сохраняем при уничтожении объекта
-		SaveRotation();
 	}
 }

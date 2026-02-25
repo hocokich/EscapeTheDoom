@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
 	public List<GameObject> Weapons;    //список типов орудий и их боезапас
 	public UnityEvent OnShootChange;     //событие, срабатывающее при изменении боезапаса
 	public UnityEvent OnCutChange;     //событие, срабатывающее при изменении боезапаса
+
 	public int killCount;               //счетчик убийств
 	public int Keys;					//Счетчик ключей
 
@@ -49,7 +50,7 @@ public class Player : MonoBehaviour
 
 	void Start()
     {
-		if (GameManager.instance.level > 1 && GameManager.instance != null)
+		if (GameManager.instance.level != 1 && GameManager.instance != null)
 		{
 			Health.currentHealth = PreviusPlayer.Health.currentHealth;
             Ammunition.ammoDictionary = PreviusPlayer.Ammunition.ammoDictionary;
@@ -83,8 +84,12 @@ public class Player : MonoBehaviour
 		CC.Move(_ccDirection(_h, _v) * MoveSpeed * Time.deltaTime);
 
         // --- гравитация ---
-        Velocity.y += Gravity * Time.deltaTime;
-        CC.Move(Velocity * Time.deltaTime);
+
+		if(CanMove)
+		{
+			Velocity.y += Gravity * Time.deltaTime;
+			CC.Move(Velocity * Time.deltaTime);
+		}
 	}
 
     private void _tryAttack(int WeaponIndex)				//Попытка совершить атаку 

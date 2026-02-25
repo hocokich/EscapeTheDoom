@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using System.Collections;
 
 public class Ammunition : MonoBehaviour
 {
@@ -9,23 +10,9 @@ public class Ammunition : MonoBehaviour
 
 	public UnityEvent onAmmoChange; //событие, срабатывающее при изменении боезапаса
 
-	public void listToDictionary()
-	{
-		ammoDictionary = new Dictionary<WeaponTypes, int>();
-
-		foreach (var ammo in ammoList)
-			if (ammoDictionary.ContainsKey(ammo.type) == false)
-				ammoDictionary.Add(ammo.type, ammo.ammo);
-	}
-
 	private void Start()
 	{
-		if(GameManager.instance.level > 1)
-		{
-			//ammoDictionary = GameManager.instance.NextPlayer.ammunition.ammoDictionary;
-		}
-		else listToDictionary();
-
+		if (GameManager.instance.level == 1) listToDictionary();
 		onAmmoChange?.Invoke();
 	}
 
@@ -60,5 +47,29 @@ public class Ammunition : MonoBehaviour
 		ammoDictionary[type] += amount;
 		onAmmoChange?.Invoke();
 		return true;
+	}
+
+	public void listToDictionary()
+	{
+		ammoDictionary = new Dictionary<WeaponTypes, int>();
+
+		foreach (var ammo in ammoList)
+			if (ammoDictionary.ContainsKey(ammo.type) == false)
+				ammoDictionary.Add(ammo.type, ammo.ammo);
+	}
+
+	IEnumerator WaitForGameManager()
+	{
+		// ∆дем пока GameManager по€витс€
+		while (GameManager.instance == null)
+		{
+			Debug.Log("∆дем GameManager...");
+			yield return null;
+		}
+
+		Debug.Log($"GameManager загружен, level = {GameManager.instance.level}");
+
+		if (GameManager.instance.level == 1) listToDictionary();
+		onAmmoChange?.Invoke();
 	}
 }
