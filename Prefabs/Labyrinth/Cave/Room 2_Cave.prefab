@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4953563685387245995}
   - component: {fileID: 6979418764486141759}
   - component: {fileID: 5067639382257009227}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Wall_North
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8790883048084915573}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6861325580382565806}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +274,7 @@ GameObject:
   - component: {fileID: 7194350308924461080}
   - component: {fileID: 5831402217942894481}
   - component: {fileID: 6782985211779370210}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Wall_West
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -414,7 +414,7 @@ GameObject:
   - component: {fileID: 472636012736507706}
   - component: {fileID: 4645616460679141335}
   - component: {fileID: 5337867479520187127}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -535,7 +535,7 @@ GameObject:
   - component: {fileID: 228591735667626252}
   - component: {fileID: 4540894917167742865}
   - component: {fileID: 4003964169435742397}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -654,7 +654,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7274758214421427277}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 7243652586450438120}
   - component: {fileID: 5546248615400225272}
   - component: {fileID: 3226110516429088923}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1079,7 +1079,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7109911834481146564}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Lamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1115,7 +1115,7 @@ GameObject:
   - component: {fileID: 2082580506084128999}
   - component: {fileID: 904687915025559946}
   - component: {fileID: 1340406891594288204}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Wall_East
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1257,7 +1257,7 @@ GameObject:
   - component: {fileID: 728670750946871396}
   - component: {fileID: 6314258516552384595}
   - component: {fileID: 3525383644948381341}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Wall_South
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1397,7 +1397,7 @@ GameObject:
   - component: {fileID: 4982196141758854031}
   - component: {fileID: 8315296968213162911}
   - component: {fileID: 3458309069249112189}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1625,8 +1625,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 8372648026700251299}
     m_Modifications:
     - target: {fileID: 2526290151090585727, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2526290151090585727, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4048507201199575313, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4048507201199575313, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
@@ -1677,8 +1685,16 @@ PrefabInstance:
       value: SimpleWallLamp Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5203999880322250538, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5203999880322250538, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144673233659436682, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8144673233659436682, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
@@ -1711,8 +1727,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 7147534772919686130}
     m_Modifications:
     - target: {fileID: 2526290151090585727, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2526290151090585727, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4048507201199575313, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4048507201199575313, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
@@ -1763,8 +1787,16 @@ PrefabInstance:
       value: SimpleWallLamp Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5203999880322250538, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5203999880322250538, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144673233659436682, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8144673233659436682, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
@@ -1848,6 +1880,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimpleWallLamp_Base Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4316619764393036459, guid: bfd7b0013a2e3614b9df0585ab73eaa3, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1870,8 +1906,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 4761179892953075659}
     m_Modifications:
     - target: {fileID: 2526290151090585727, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2526290151090585727, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4048507201199575313, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4048507201199575313, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
@@ -1922,8 +1966,16 @@ PrefabInstance:
       value: SimpleWallLamp Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5203999880322250538, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5203999880322250538, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144673233659436682, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8144673233659436682, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
@@ -2007,6 +2059,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimpleWallLamp_Base Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4316619764393036459, guid: bfd7b0013a2e3614b9df0585ab73eaa3, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -2029,8 +2085,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 3190248223269202445}
     m_Modifications:
     - target: {fileID: 2526290151090585727, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 2526290151090585727, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4048507201199575313, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 4048507201199575313, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
@@ -2081,8 +2145,16 @@ PrefabInstance:
       value: SimpleWallLamp Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5203999880322250538, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5203999880322250538, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144673233659436682, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8144673233659436682, guid: 02ceadd0aa36cd049b6ed78b55aabb1d, type: 3}
       propertyPath: m_IsActive
@@ -2166,6 +2238,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimpleWallLamp_Base Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 4316619764393036459, guid: bfd7b0013a2e3614b9df0585ab73eaa3, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -2238,6 +2314,10 @@ PrefabInstance:
     - target: {fileID: 4316619764393036459, guid: bfd7b0013a2e3614b9df0585ab73eaa3, type: 3}
       propertyPath: m_Name
       value: SimpleWallLamp_Base Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4316619764393036459, guid: bfd7b0013a2e3614b9df0585ab73eaa3, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

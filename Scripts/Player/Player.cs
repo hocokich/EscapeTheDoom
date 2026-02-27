@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
 
     [Header("References")]
     public Transform CameraTransform;   // Местоположение главной камеры
+	public GameObject Map;
 
     public CharacterController CC;
 	public Vector3 Velocity;
@@ -164,6 +165,9 @@ public class Player : MonoBehaviour
 			PrevWeaponIndex = CurWeaponIndex;   //записываем предыдущее
 			CurWeaponIndex = 2;
 		}
+
+		//Карта - показывается когда зажата M, исчезает когда отпущена
+		Map.SetActive(Input.GetKey(KeyCode.M));
 
 		// --- Если персонаж на земле и нажал кнопку выстрела, то произойдет попытка выстрела ---
 		if (Input.GetMouseButton(0) && CC.isGrounded)
