@@ -4,7 +4,9 @@ using Unity.AI.Navigation;
 
 public class MazeGenerator : MonoBehaviour
 {
-    public int width = 10;
+
+
+	public int width = 10;
     public int height = 10;
     public float roomSize = 4f; // ? добавил недостающий параметр
     public int Keys = 0;        // ключи дл€ прохождени€ уровн€
@@ -12,9 +14,15 @@ public class MazeGenerator : MonoBehaviour
     [Header("Prefabs")]
 	public GameObject[] roomPrefabs;
     public GameObject[] enemyPrefabs;
-    public GameObject exitPrefab;
+
+	[Header("Ќастройки врагов")]
+	[SerializeField] private int enemyCount = 5; // сколько врагов по€витс€
+	[SerializeField] private int type1Weight = 1;
+	[SerializeField] private int type2Weight = 3;
+	// ƒл€ новых типов просто добавл€й новые пол€
+
+	public GameObject exitPrefab;
     public GameObject KeyPrefab;
-    public int enemyCount = 5; // сколько врагов по€витс€
 
     [Header("NavMesh")]
     public NavMeshSurface surface;
@@ -42,7 +50,7 @@ public class MazeGenerator : MonoBehaviour
 		if (surface != null)
 			surface.BuildNavMesh();
 
-		SpawnEnemies(2);
+		SpawnEnemies();
 
         SpawnKeys();
 	}
@@ -138,22 +146,45 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    void SpawnEnemies(int index)
-    {
-        if (enemyPrefabs == null) return;
+	void SpawnEnemies()
+	{
+		if (enemyPrefabs == null) return;
 
-        for (int i = 0; i < enemyCount; i++)
-        {
-            int x = Random.Range(0, width);
-            int y = Random.Range(0, height);
-            // избегаем старта (0,0) и выхода (width-1,height-1)
-            if ((x == 0 && y == 0) || (x == width - 1 && y == height - 1))
-                continue;
-            
-            Vector3 pos = new Vector3(x * roomSize, 0f, y * roomSize);
-            Instantiate(enemyPrefabs[index], pos, Quaternion.identity, transform);
-        }
-    }
+		// —оотношение 1:2 (первый тип : второй тип)
+		int type1Count = enemyCount / 3; // 1/3 - первый тип
+		int type2Count = enemyCount - type1Count; // 2/3 - второй тип
+
+		int spawned1 = 0;
+		int spawned2 = 0;
+
+		for (int i = 0; i < enemyCount; i++)
+		{
+			int x = Random.Range(0, width);
+			int y = Random.Range(0, height);
+
+			if ((x == 0 && y == 0) || (x == width - 1 && y == height - 1))
+			{
+				i--;
+				continue;
+			}
+
+			// ќпредел€ем какой тип спавнить
+			int enemyType;
+			if (spawned1 < type1Count && (spawned2 >= type2Count || Random.value < 0.33f))
+			{
+				enemyType = 0; // первый тип
+				spawned1++;
+			}
+			else
+			{
+				enemyType = 1; // второй тип
+				spawned2++;
+			}
+
+			Vector3 pos = new Vector3(x * roomSize, 0f, y * roomSize);
+			Instantiate(enemyPrefabs[enemyType], pos, Quaternion.identity, transform);
+		}
+	}
 
 	void SpawnKeys()
 	{

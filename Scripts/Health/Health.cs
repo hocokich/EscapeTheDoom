@@ -12,7 +12,7 @@ public class Health : MonoBehaviour    //класс, отвечающий за здоровье персонажа
 
 	public UnityEvent spawnOnDeath;       //ссылка на обработчики события генерации предмета в позиции противника при его смерти
 	public UnityEvent onDeath;                     //ссылка на обработчики события смерти
-	public UnityEvent onHitTaken;                  //ссылка на обработчики события получения удара
+	public UnityEvent<int> onHitTaken;                  //ссылка на обработчики события получения удара
 
 	private void Start() => onHealthChange?.Invoke(currentHealth, maximumHealth);
 
@@ -38,7 +38,7 @@ public class Health : MonoBehaviour    //класс, отвечающий за здоровье персонажа
 	{
 		if (currentHealth <= 0) return;
 
-		onHitTaken?.Invoke();
+		onHitTaken?.Invoke((int)amount);
 
 		currentHealth = Mathf.FloorToInt(currentHealth - amount);
 

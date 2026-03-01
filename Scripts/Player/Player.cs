@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using System.Collections;
 using Unity.VisualScripting;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -71,7 +72,7 @@ public class Player : MonoBehaviour
 
 	void Update()
     {
-        if (Health.currentHealth == 0) death();
+		if (Health.currentHealth == 0) death();
 
         // --- установка находится ли игрок на земле ---
         if (CC.isGrounded && Velocity.y < 0)
@@ -95,7 +96,7 @@ public class Player : MonoBehaviour
 
     private void _tryAttack(int WeaponIndex)				//Попытка совершить атаку 
     {
-        switch (WeaponIndex)
+		switch (WeaponIndex)
         {
             case 1: //Machinegun
 				if (Ammunition.checkAmmo(WeaponTypes.Machinegun) && Weapons[1].GetComponent<CMachineGun>().canAttack)	//Если условия выполены, то

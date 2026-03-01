@@ -154,7 +154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3886768113416019847
 RectTransform:
   m_ObjectHideFlags: 0
@@ -543,7 +543,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
-  Sound: {fileID: 8354952875037766949}
+  Sounds: {fileID: 0}
   enemyRenderer: {fileID: 8078587245948569913}
 --- !u!114 &3750270118231320283
 MonoBehaviour:

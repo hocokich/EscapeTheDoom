@@ -9,11 +9,17 @@ public class ExitPortal : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		var mazeKeys = FindInactiveObject("Maze").GetComponent<MazeGenerator>().Keys;
+		var playerKeys = GameManager.instance.player.GetComponent<Player>().Keys;
+
 		if (other.CompareTag("Player"))
-			if (FindInactiveObject("Maze").GetComponent<MazeGenerator>().Keys == GameManager.instance.player.GetComponent<Player>().Keys)
+			if (mazeKeys <= playerKeys)
 			{
 				GameManager.instance.Win();
-				GameObject.Find("Player").GetComponent<Player>().Keys = 0;
+				GameObject.Find("Player").GetComponent<Player>().Keys = playerKeys - mazeKeys;
+				//Чтобы игрок не ушёл в минус делаем проверку
+				if (GameObject.Find("Player").GetComponent<Player>().Keys < 0)
+					GameObject.Find("Player").GetComponent<Player>().Keys = 0;
 			}
 			else
 			{

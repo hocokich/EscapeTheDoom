@@ -6,6 +6,7 @@ using System.Drawing;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
@@ -18,7 +19,7 @@ public class EnemyAI : MonoBehaviour
 	[Header("Health")]
 	public Health health;
 
-	[Header("Animator")]
+	[Header("Animators")]
 	public Animator animator;
 
 	[Header("Attack")]

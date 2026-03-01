@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 	public bool isPaused = false;
 
     public GameObject player;
+	[SerializeField] private LayerMask enemyLayer;
 
 	[NonSerialized]
 	public Player _PreviusPlayer;
@@ -239,7 +240,7 @@ public class GameManager : MonoBehaviour
         if (pausePanel) pausePanel.SetActive(false);
         if (winPanel) winPanel.SetActive(false);
         if (losePanel) losePanel.SetActive(false);
-    }
+	}
 
     // ---------- Пауза ----------
     public void Pause()
@@ -248,7 +249,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         if (pausePanel) pausePanel.SetActive(true);
-    }
+
+	}
 
     public void Resume()
     {
@@ -256,7 +258,10 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         if (pausePanel) pausePanel.SetActive(false);
-    }
+
+		Physics.IgnoreLayerCollision(enemyLayer, LayerMask.NameToLayer("UI"), false);
+		Physics.IgnoreLayerCollision(enemyLayer, LayerMask.NameToLayer("UI.Users"), false);
+	}
 
     // ---------- Состояния игры ----------
     public void Win()
@@ -264,14 +269,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         if (winPanel) winPanel.SetActive(true);
-    }
+	}
 
     public void Lose()
     {
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         if (losePanel) losePanel.SetActive(true);
-    }
+	}
     // ---------- Кнопки ----------
     public void RestartGame()
     {

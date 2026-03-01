@@ -27,7 +27,7 @@ public class MapCam : MonoBehaviour
 		transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
 		// Размер камеры
-		GetComponent<Camera>().orthographicSize = 9 + (mazeSize * 0.75f);
+		GetComponent<Camera>().orthographicSize = 7 + mazeSize;
 	}
 
 	private Bounds GetCombinedBounds(Transform parent)
